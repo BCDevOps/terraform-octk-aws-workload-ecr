@@ -1,1 +1,3 @@
-//module outputs should be defined and documented here.
+output "repository_url" {
+  value = aws_ecr_repository.this.repository_url
+}
