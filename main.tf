@@ -8,7 +8,8 @@ terraform {
 }
 
 resource "aws_ecr_repository" "this" {
-  name                 = var.repository_name
+  for_each             = toset(var.repository_names)
+  name                 = each.key
   image_tag_mutability = var.image_tag_mutability
 
   image_scanning_configuration {
@@ -73,6 +74,7 @@ data "aws_iam_policy_document" "ecr_read_write" {
 
 # Combining read and write policies is required because only one policy may be applied to a repository
 resource "aws_ecr_repository_policy" "this" {
-  repository = aws_ecr_repository.this.name
+  for_each   = aws_ecr_repository.this
+  repository = aws_ecr_repository.this[each.key].name
   policy     = length(var.write_principals) > 0 ? data.aws_iam_policy_document.ecr_read_write.json : data.aws_iam_policy_document.ecr_read.json
 }

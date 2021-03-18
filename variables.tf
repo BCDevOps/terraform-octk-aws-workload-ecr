@@ -3,9 +3,9 @@ variable "aws_region" {
   default     = "ca-central-1"
 }
 
-variable "repository_name" {
+variable "repository_names" {
   description = "Name for the container repository to be provisioned."
-  type        = string
+  type        = list(string)
 }
 
 variable "image_tag_mutability" {
